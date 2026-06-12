@@ -146,6 +146,7 @@ body {
     font-weight: 700;
     background: var(--gradient-accent);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     display: flex;
     align-items: center;
@@ -243,6 +244,7 @@ header {
     font-weight: 700;
     background: var(--gradient-accent);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     text-decoration: none;
 }
@@ -354,6 +356,7 @@ main {
     margin-bottom: 10px;
     background: linear-gradient(to right, #ffffff, #a855f7);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     text-align: center;
 }
