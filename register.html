@@ -3,109 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registration</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
-            margin: 0;
-            padding: 20px;
-            text-align: center;
-        }
-        .container {
-            max-width: 400px;
-            margin: 50px auto;
-            background-color: #fff;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-        }
-        h2 {
-            color: #333;
-            margin-bottom: 20px;
-        }
-        form {
-            text-align: left;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            color: #333;
-        }
-        .form-group input[type="text"],
-        .form-group input[type="password"],
-        .form-group input[type="email"],
-        .form-group input[type="tel"],
-        .form-group textarea {
-            width: calc(100% - 20px);
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 1em;
-        }
-        .form-group button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1em;
-        }
-        .form-group button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    <title>Registration - VNR Hostels</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h2>Registration Form</h2>
-        <form id="registerForm" onsubmit="return handleRegistration()">
-            <div class="form-group">
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" required>
+    <header></header>
+
+    <main style="padding: 20px 0;">
+        <div class="glass-card medium">
+            <h2>Create an Account</h2>
+            <p class="subtitle">Join VNR Hostels management system to register your stay.</p>
+            
+            <form id="registerForm" onsubmit="return handleRegister(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" placeholder="e.g. jdoe24" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" placeholder="••••••••" oninput="checkPasswordInput(this.value)" required autocomplete="new-password">
+                        
+                        <!-- Real-time Password Strength Visualizer -->
+                        <div class="pw-meter">
+                            <div id="pwMeterBar" class="pw-meter-bar"></div>
+                        </div>
+                        <div class="pw-criteria">
+                            <span class="pw-criterion invalid" id="critLength">❌ Min 8 chars</span>
+                            <span class="pw-criterion invalid" id="critUpper">❌ 1 Uppercase</span>
+                            <span class="pw-criterion invalid" id="critLower">❌ 1 Lowercase</span>
+                            <span class="pw-criterion invalid" id="critDigit">❌ 1 Number</span>
+                            <span class="pw-criterion invalid" id="critSpecial">❌ 1 Special char</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="fullName">Full Name</label>
+                        <input type="text" id="fullName" placeholder="e.g. John Doe" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email ID</label>
+                        <input type="email" id="email" placeholder="e.g. student@example.com" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="phoneNumber">Phone Number</label>
+                        <input type="tel" id="phoneNumber" pattern="[0-9]{10}" placeholder="e.g. 9876543210" required>
+                        <span style="font-size: 0.75rem; color: var(--text-dim);">10 digits, numbers only</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="dob">Date of Birth</label>
+                        <input type="date" id="dob" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="gender">Gender</label>
+                        <select id="gender" required>
+                            <option value="" disabled selected>Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="role">Register As</label>
+                        <select id="role" required>
+                            <option value="student">Student</option>
+                            <option value="guest">Guest / Visitor</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Permanent Address</label>
+                    <textarea id="address" rows="3" placeholder="Enter your full home address" required></textarea>
+                </div>
+
+                <h3 style="font-size: 1.1rem; margin: 25px 0 15px 0; color: var(--primary); border-bottom: 1px solid var(--glass-border); padding-bottom: 5px;">
+                    Emergency Contact Details
+                </h3>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="emgName">Contact Name</label>
+                        <input type="text" id="emgName" placeholder="e.g. Parent or Guardian Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="emgPhone">Contact Phone Number</label>
+                        <input type="tel" id="emgPhone" pattern="[0-9]{10}" placeholder="e.g. 9876543210" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="margin-top: 15px;">Create Account</button>
+            </form>
+
+            <div class="form-footer">
+                <p>Already have an account? <a href="login.html">Sign In Here</a></p>
             </div>
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <div class="form-group">
-                <label for="fullName">Full Name:</label>
-                <input type="text" id="fullName" name="fullName" required>
-            </div>
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            <div class="form-group">
-                <label for="phoneNumber">Phone Number:</label>
-                <input type="tel" id="phoneNumber" name="phoneNumber" pattern="[0-9]{10}" required>
-                <small>Format: 1234567890</small>
-            </div>
-            <div class="form-group">
-                <label for="address">Address:</label>
-                <textarea id="address" name="address" rows="4" required></textarea>
-            </div>
-            <div class="form-group">
-                <button type="submit">Register</button>
-            </div>
-        </form>
-    </div>
+        </div>
+    </main>
+
+    <footer></footer>
 
     <script>
-        function handleRegistration() {
-            // Replace with actual registration logic (e.g., API call)
-            alert('Registration successful!');
-            // Redirect to login.html or another page after successful registration
-            redirectTo('login.html');
-            return false; // Prevent form submission
+        function checkPasswordInput(val) {
+            const bar = document.getElementById('pwMeterBar');
+            const result = checkPasswordStrength(val);
+            
+            // Update Bar colors & widths
+            bar.className = 'pw-meter-bar';
+            if (val.length > 0) {
+                if (result.score <= 1) {
+                    bar.classList.add('weak');
+                } else if (result.score <= 3) {
+                    bar.classList.add('medium');
+                } else {
+                    bar.classList.add('strong');
+                }
+            }
+            
+            // Helper to toggle valid/invalid
+            const updateCriterion = (elemId, isValid) => {
+                const el = document.getElementById(elemId);
+                if (isValid) {
+                    el.className = 'pw-criterion valid';
+                    el.innerHTML = el.innerHTML.replace('❌', '✅');
+                } else {
+                    el.className = 'pw-criterion invalid';
+                    el.innerHTML = el.innerHTML.replace('✅', '❌');
+                }
+            };
+            
+            updateCriterion('critLength', result.criteria.length);
+            updateCriterion('critUpper', result.criteria.uppercase);
+            updateCriterion('critLower', result.criteria.lowercase);
+            updateCriterion('critDigit', result.criteria.number);
+            updateCriterion('critSpecial', result.criteria.special);
         }
 
-        function redirectTo(page) {
-            window.location.href = page;
+        function handleRegister(e) {
+            e.preventDefault();
+            
+            const passwordVal = document.getElementById('password').value;
+            const strength = checkPasswordStrength(passwordVal);
+
+            if (!strength.isValid) {
+                showToast('Please create a strong password that meets all criteria.', 'danger');
+                return false;
+            }
+            
+            const userData = {
+                username: document.getElementById('username').value.trim(),
+                password: passwordVal,
+                fullName: document.getElementById('fullName').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                phone: document.getElementById('phoneNumber').value,
+                dob: document.getElementById('dob').value,
+                gender: document.getElementById('gender').value,
+                role: document.getElementById('role').value,
+                address: document.getElementById('address').value.trim(),
+                emgName: document.getElementById('emgName').value.trim(),
+                emgPhone: document.getElementById('emgPhone').value
+            };
+
+            const result = handleRegisterSubmit(userData);
+            
+            if (result.success) {
+                showToast('Registration successful! Redirecting to login...', 'success');
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 1500);
+            } else {
+                showToast(result.message, 'danger');
+            }
+            return false;
         }
     </script>
 </body>

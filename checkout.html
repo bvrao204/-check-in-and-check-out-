@@ -3,102 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Check-Out</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
-            margin: 0;
-            padding: 20px;
-            text-align: center;
-        }
-        .container {
-            max-width: 400px;
-            margin: 50px auto;
-            background-color: #fff;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-        }
-        h2 {
-            color: #333;
-            margin-bottom: 20px;
-        }
-        form {
-            text-align: left;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            color: #333;
-        }
-        .form-group input[type="text"],
-        .form-group input[type="date"] {
-            width: calc(100% - 20px);
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 1em;
-        }
-        .form-group textarea {
-            width: calc(100% - 20px);
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 1em;
-            resize: vertical;
-            min-height: 100px;
-        }
-        .form-group button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1em;
-        }
-        .form-group button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    <title>Check-Out - VNR Hostels</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h2>Check-Out</h2>
-        <form id="checkOutForm" onsubmit="return handleCheckOut()">
-            <div class="form-group">
-                <label for="roomNumber">Room Number:</label>
-                <input type="text" id="roomNumber" name="roomNumber" required>
+    <div class="app-container">
+        <div class="main-content">
+            <div class="glass-card" id="mainCard" style="margin: 0 auto;">
+                <h2>Hostel Check-Out</h2>
+                <p class="subtitle">Complete the checklist to release your room allocation.</p>
+
+                <form id="checkOutForm" onsubmit="return handleCheckOut(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="roomDisplay">Allocated Room</label>
+                            <input type="text" id="roomDisplay" readonly style="background: rgba(255, 255, 255, 0.01); color: var(--text-muted);">
+                        </div>
+                        <div class="form-group">
+                            <label for="blockDisplay">Hostel Block</label>
+                            <input type="text" id="blockDisplay" readonly style="background: rgba(255, 255, 255, 0.01); color: var(--text-muted);">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="checkOutDate">Check-Out Date</label>
+                        <input type="date" id="checkOutDate" required>
+                    </div>
+
+                    <h3 style="font-size: 1.1rem; margin: 25px 0 15px 0; color: var(--primary); border-bottom: 1px solid var(--glass-border); padding-bottom: 5px;">
+                        Check-Out Requirements
+                    </h3>
+
+                    <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px;">
+                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 0.95rem;">
+                            <input type="checkbox" id="keyReturned" required style="width: 18px; height: 18px; cursor: pointer;">
+                            Room keys returned to warden
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 0.95rem;">
+                            <input type="checkbox" id="roomInspected" required style="width: 18px; height: 18px; cursor: pointer;">
+                            Room cleanliness & condition inspected
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 0.95rem;">
+                            <input type="checkbox" id="duesCleared" required style="width: 18px; height: 18px; cursor: pointer;">
+                            All mess & hostel dues cleared
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="feedback">Your Experience / Feedback</label>
+                        <textarea id="feedback" rows="3" placeholder="Tell us how we can improve your stay..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-danger" style="margin-top: 10px;">Confirm Check-Out</button>
+                </form>
             </div>
-            <div class="form-group">
-                <label for="checkOutDate">Check-Out Date:</label>
-                <input type="date" id="checkOutDate" name="checkOutDate" required>
-            </div>
-            <div class="form-group">
-                <label for="feedback">Feedback:</label>
-                <textarea id="feedback" name="feedback" rows="4"></textarea>
-            </div>
-            <div class="form-group">
-                <button type="submit">Check-Out</button>
-            </div>
-        </form>
+        </div>
     </div>
 
     <script>
-        function handleCheckOut() {
-            // Replace with actual check-out logic (e.g., API call)
-            alert('You have successfully checked out!');
-            // Redirect to checkout_confirmation.html or another page after successful check-out
-            redirectTo('checkout_confirmation.html');
-            return false; // Prevent form submission
-        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = getLoggedInUser();
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
 
-        function redirectTo(page) {
-            window.location.href = page;
+            const active = getUserActiveCheckIn(user.username);
+            const card = document.getElementById('mainCard');
+
+            if (!active) {
+                card.innerHTML = `
+                    <div style="text-align: center; padding: 20px 0;">
+                        <span style="font-size: 3.5rem; display: block; margin-bottom: 15px;">⚠️</span>
+                        <h2>No Active Accommodation</h2>
+                        <p class="subtitle" style="margin-bottom: 30px;">
+                            You currently do not have any room check-in registered in our system, so you cannot perform a check-out.
+                        </p>
+                        <a href="confirmation.html" class="btn btn-primary">Go to Dashboard</a>
+                    </div>
+                `;
+                return;
+            }
+
+            // Populate active details
+            document.getElementById('roomDisplay').value = `Room ${active.roomNumber}`;
+            document.getElementById('blockDisplay').value = active.block;
+
+            // Set default date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('checkOutDate').value = today;
+            document.getElementById('checkOutDate').min = active.checkInDate; // Can't checkout before checkin
+        });
+
+        function handleCheckOut(e) {
+            e.preventDefault();
+
+            const user = getLoggedInUser();
+            const keysChecked = document.getElementById('keyReturned').checked;
+            const inspectedChecked = document.getElementById('roomInspected').checked;
+            const duesChecked = document.getElementById('duesCleared').checked;
+
+            if (!keysChecked || !inspectedChecked || !duesChecked) {
+                showToast('Please verify all check-out requirements.', 'danger');
+                return false;
+            }
+
+            const checkoutDetails = {
+                username: user.username,
+                checkOutDate: document.getElementById('checkOutDate').value,
+                feedback: document.getElementById('feedback').value.trim(),
+                keysReturned: true
+            };
+
+            const result = checkOutUser(checkoutDetails);
+
+            if (result.success) {
+                showToast('Check-Out processed successfully!', 'success');
+                setTimeout(() => {
+                    window.location.href = 'checkout_confirmation.html';
+                }, 1200);
+            } else {
+                showToast(result.message, 'danger');
+            }
+            return false;
         }
     </script>
 </body>

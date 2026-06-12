@@ -3,46 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Check-Out Confirmation</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
-            margin: 0;
-            padding: 20px;
-            text-align: center;
-        }
-        .container {
-            max-width: 600px;
-            margin: 50px auto;
-            background-color: #fff;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-        }
-        h1 {
-            color: #333;
-        }
-        p {
-            font-size: 1.2em;
-            color: #666;
-            margin-bottom: 20px;
-        }
-        .hostel-details {
-            text-align: left;
-            margin-top: 20px;
-        }
-    </style>
+    <title>Check-Out Confirmation - VNR Hostels</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h1>Check-Out Confirmation</h1>
-        <p>Thank you for visiting!</p>
-        <div class="hostel-details">
-            <p>Hostel Name: VNRVJIET Hostel</p>
-            <p>Address: Pragathi Nagar, Nizampet (S.O), Hyderabad, Telangana, India - 500 090</p>
-            <p>Contact: 9876541230</p>
+    <header></header>
+
+    <main>
+        <div class="glass-card">
+            <h2 style="color: var(--danger);">Check-Out Completed</h2>
+            <p class="subtitle" style="margin-bottom: 20px;">Your check-out has been finalized. Room inventory released.</p>
+
+            <div class="ticket-wrapper">
+                <div class="ticket-header">
+                    <div class="ticket-logo" style="color: var(--danger);">HMS DEPARTURE RECEIPT</div>
+                    <div class="ticket-title" id="ticketId">TXN-#####</div>
+                </div>
+
+                <div class="ticket-grid">
+                    <div class="ticket-item">
+                        <span class="ticket-label">Student Name</span>
+                        <span class="ticket-value" id="ticketName">--</span>
+                    </div>
+                    <div class="ticket-item">
+                        <span class="ticket-label">Released Accommodation</span>
+                        <span class="ticket-value" id="ticketRoom">--</span>
+                    </div>
+                    <div class="ticket-item">
+                        <span class="ticket-label">Check-In Date</span>
+                        <span class="ticket-value" id="ticketCheckIn">--</span>
+                    </div>
+                    <div class="ticket-item">
+                        <span class="ticket-label">Check-Out Date</span>
+                        <span class="ticket-value" id="ticketCheckOut">--</span>
+                    </div>
+                    <div class="ticket-item" style="grid-column: span 2;">
+                        <span class="ticket-label">Key Status</span>
+                        <span class="ticket-value" id="ticketKey">🔑 Keys Returned & Logged</span>
+                    </div>
+                </div>
+
+                <div class="ticket-footer">
+                    <strong>Thank you for staying at VNR Hostels!</strong><br>
+                    Your feedback is highly valued and helps us improve our campus living services.
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: center; margin-top: 15px;">
+                <a href="confirmation.html" class="btn btn-primary">
+                    Return to Dashboard
+                </a>
+            </div>
         </div>
-    </div>
+    </main>
+
+    <footer></footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = getLoggedInUser();
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Retrieve latest checkout details
+            const latestCheckout = JSON.parse(localStorage.getItem('hms_latest_checkout'));
+
+            if (latestCheckout && latestCheckout.username === user.username) {
+                document.getElementById('ticketId').innerText = latestCheckout.id;
+                document.getElementById('ticketName').innerText = latestCheckout.fullName;
+                document.getElementById('ticketRoom').innerText = `${latestCheckout.block} - Room ${latestCheckout.roomNumber}`;
+                document.getElementById('ticketCheckIn').innerText = latestCheckout.checkInDate;
+                document.getElementById('ticketCheckOut').innerText = latestCheckout.checkOutDate;
+            } else {
+                // Fallback to latest checkout from history log
+                const history = getUserCheckInHistory(user.username);
+                const checkedOutRecords = history.filter(h => h.status === 'Checked Out');
+                
+                if (checkedOutRecords.length > 0) {
+                    const latest = checkedOutRecords[checkedOutRecords.length - 1];
+                    document.getElementById('ticketId').innerText = latest.id;
+                    document.getElementById('ticketName').innerText = latest.fullName;
+                    document.getElementById('ticketRoom').innerText = `${latest.block} - Room ${latest.roomNumber}`;
+                    document.getElementById('ticketCheckIn').innerText = latest.checkInDate;
+                    document.getElementById('ticketCheckOut').innerText = latest.checkOutDate;
+                } else {
+                    showToast('No check-out transaction details found!', 'danger');
+                    setTimeout(() => {
+                        window.location.href = 'confirmation.html';
+                    }, 2000);
+                }
+            }
+        });
+    </script>
 </body>
 </html>

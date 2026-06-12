@@ -3,60 +3,220 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confirmation</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
-            margin: 0;
-            padding: 20px;
-            text-align: center;
-        }
-        .container {
-            max-width: 600px;
-            margin: 50px auto;
-            background-color: #fff;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-        }
-        h1 {
-            color: #333;
-        }
-        .button-group {
-            margin-top: 20px;
-            text-align: center;
-        }
-        .button-group button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            margin: 5px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1em;
-        }
-        .button-group button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    <title>Student Portal - VNR Hostels</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h1>Confirmation</h1>
-        <p>Please select an action:</p>
+    <div class="app-container">
+        <div class="main-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass-border); padding-bottom: 15px; margin-bottom: 25px; flex-wrap: wrap; gap: 10px;">
+                <h2 style="margin: 0; text-align: left; background: var(--gradient-accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    Student Portal Dashboard
+                </h2>
+                <div style="text-align: right;">
+                    <span style="font-size: 0.85rem; color: var(--text-muted);">Welcome,</span>
+                    <strong style="display: block; font-size: 1.1rem; color: var(--text-main);" id="studentName">--</strong>
+                </div>
+            </div>
 
-        <div class="button-group">
-            <button onclick="redirectTo('checkin.html')">Check-In</button>
-            <button onclick="redirectTo('checkout.html')">Check-Out</button>
+            <!-- Profile Details Box -->
+            <div class="dashboard-user-info">
+                <div class="user-detail">
+                    <label>Username</label>
+                    <p id="profileUname">--</p>
+                </div>
+                <div class="user-detail">
+                    <label>Email ID</label>
+                    <p id="profileEmail">--</p>
+                </div>
+                <div class="user-detail">
+                    <label>Phone Number</label>
+                    <p id="profilePhone">--</p>
+                </div>
+                <div class="user-detail">
+                    <label>Gender / DOB</label>
+                    <p id="profileGenderDob">--</p>
+                </div>
+            </div>
+
+            <!-- Active Check-In status card -->
+            <div id="active-status-container" style="margin-bottom: 25px;">
+                <!-- Loaded dynamically by JS -->
+            </div>
+
+            <!-- Widgets Grid (Notice Board & Mess Menu) -->
+            <div class="widget-grid">
+                <!-- Mess Menu Widget -->
+                <div class="widget-card">
+                    <div class="widget-title">
+                        <span>🍽️</span> Today's Mess Menu
+                    </div>
+                    <div class="menu-day-title" id="messDayTitle">Monday</div>
+                    <div class="menu-item">
+                        <span class="menu-label">🍳 Breakfast</span>
+                        <span class="menu-value" id="breakfastMenu">--</span>
+                    </div>
+                    <div class="menu-item">
+                        <span class="menu-label">🍲 Lunch</span>
+                        <span class="menu-value" id="lunchMenu">--</span>
+                    </div>
+                    <div class="menu-item">
+                        <span class="menu-label">🍛 Dinner</span>
+                        <span class="menu-value" id="dinnerMenu">--</span>
+                    </div>
+                </div>
+
+                <!-- Announcements Widget -->
+                <div class="widget-card">
+                    <div class="widget-title">
+                        <span>📢</span> Warden Announcements
+                    </div>
+                    <div id="noticesContainer" style="display:flex; flex-direction:column; gap: 10px;">
+                        <!-- Loaded dynamically by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- History Logs Section -->
+            <div style="margin-top: 30px;">
+                <h3 style="font-size: 1.25rem; margin-bottom: 15px; color: var(--primary); text-align: left; display: flex; align-items: center; gap: 8px;">
+                    📜 Accommodation History Logs
+                </h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Booking ID</th>
+                                <th>Block Name</th>
+                                <th>Room Number</th>
+                                <th>Check-In Date</th>
+                                <th>Check-Out Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody">
+                            <!-- Loaded dynamically by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        function redirectTo(page) {
-            window.location.href = page;
-        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = getLoggedInUser();
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Profile info injection
+            document.getElementById('studentName').innerText = user.fullName;
+            document.getElementById('profileUname').innerText = user.username;
+            document.getElementById('profileEmail').innerText = user.email;
+            document.getElementById('profilePhone').innerText = user.phone;
+            document.getElementById('profileGenderDob').innerText = `${user.gender} | ${user.dob}`;
+
+            // Load Active Booking State
+            const activeBooking = getUserActiveCheckIn(user.username);
+            const statusContainer = document.getElementById('active-status-container');
+
+            if (activeBooking) {
+                statusContainer.innerHTML = `
+                    <div class="action-box" style="border-left: 5px solid var(--success); text-align: left; padding: 25px; background: rgba(16, 185, 129, 0.02);">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 15px;">
+                            <div>
+                                <span class="badge badge-success" style="margin-bottom: 10px;">Active Accommodation</span>
+                                <h3 style="margin: 5px 0; font-size: 1.4rem;">Allocated: ${activeBooking.block}</h3>
+                                <p style="margin: 0; color: var(--text-muted);">Room: <strong>${activeBooking.roomNumber}</strong> (${activeBooking.roomType})</p>
+                                <p style="margin: 5px 0 0 0; color: var(--text-muted);">Check-In Date: <strong>${activeBooking.checkInDate}</strong></p>
+                            </div>
+                            <div style="display: flex; gap: 10px;">
+                                <a href="checkin_confirmation.html" class="btn btn-secondary" style="width: auto;">View Ticket</a>
+                                <a href="checkout.html" class="btn btn-danger" style="width: auto;">Check-Out</a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                statusContainer.innerHTML = `
+                    <div class="action-box" style="border-left: 5px solid var(--warning); text-align: left; padding: 25px; background: rgba(245, 158, 11, 0.02);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+                            <div>
+                                <span class="badge badge-warning" style="margin-bottom: 10px;">No Room Allocation</span>
+                                <h3 style="margin: 5px 0; font-size: 1.2rem;">Not Checked In</h3>
+                                <p style="margin: 0; color: var(--text-muted);">Select Check-In to request room booking at VNR Hostels.</p>
+                            </div>
+                            <a href="checkin.html" class="btn btn-primary" style="width: auto;">Start Check-In</a>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Load Mess Menu dynamically based on today's weekday name
+            const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            const todayName = dayNames[new Date().getDay()];
+            const menus = JSON.parse(localStorage.getItem('hms_mess_menus') || '{}');
+            const todayMenu = menus[todayName] || { breakfast: 'Not Available', lunch: 'Not Available', dinner: 'Not Available' };
+
+            document.getElementById('messDayTitle').innerText = `${todayName}'s Menu`;
+            document.getElementById('breakfastMenu').innerText = todayMenu.breakfast;
+            document.getElementById('lunchMenu').innerText = todayMenu.lunch;
+            document.getElementById('dinnerMenu').innerText = todayMenu.dinner;
+
+            // Load Announcements
+            const notices = JSON.parse(localStorage.getItem('hms_announcements') || '[]');
+            const noticesContainer = document.getElementById('noticesContainer');
+            
+            if (notices.length === 0) {
+                noticesContainer.innerHTML = `<p style="color:var(--text-dim); font-size:0.85rem;">No active notices.</p>`;
+            } else {
+                noticesContainer.innerHTML = notices.slice(0, 3).map(notice => `
+                    <div class="announcement-item">
+                        <div class="announcement-meta">
+                            <span>Warden Office</span>
+                            <span>${notice.date}</span>
+                        </div>
+                        <div class="announcement-text">
+                            <strong>${notice.title}</strong> - ${notice.text}
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // Load History Table
+            const history = getUserCheckInHistory(user.username);
+            const tableBody = document.getElementById('historyTableBody');
+            
+            if (history.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; color: var(--text-dim); padding: 30px;">
+                            No accommodation records found.
+                        </td>
+                    </tr>
+                `;
+            } else {
+                tableBody.innerHTML = history.reverse().map(record => {
+                    const statusBadge = record.status === 'Active' 
+                        ? `<span class="badge badge-success">Active</span>` 
+                        : `<span class="badge badge-danger">Checked Out</span>`;
+                        
+                    return `
+                        <tr>
+                            <td><strong>${record.id}</strong></td>
+                            <td>${record.block}</td>
+                            <td>Room ${record.roomNumber}</td>
+                            <td>${record.checkInDate}</td>
+                            <td>${record.checkOutDate || '--'}</td>
+                            <td>${statusBadge}</td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+        });
     </script>
 </body>
 </html>

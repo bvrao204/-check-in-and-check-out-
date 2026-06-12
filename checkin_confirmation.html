@@ -3,45 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Check-In Confirmation</title>
+    <title>Check-In Confirmation - VNR Hostels</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js"></script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
-            margin: 0;
-            padding: 20px;
-            text-align: center;
-        }
-        .container {
-            max-width: 600px;
-            margin: 50px auto;
-            background-color: #fff;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-        }
-        h1 {
-            color: #333;
-        }
-        p {
-            font-size: 1.2em;
-            color: #666;
-            margin-bottom: 20px;
-        }
-        .hostel-details {
-            text-align: left;
-            margin-top: 20px;
+        @media print {
+            body {
+                background: #ffffff;
+                color: #000000;
+            }
+            header, footer, .btn-group, .nav-menu {
+                display: none !important;
+            }
+            .glass-card {
+                border: none;
+                box-shadow: none;
+                background: none;
+                padding: 0;
+                margin: 0;
+                max-width: 100%;
+            }
+            .ticket-wrapper {
+                border: 1px solid #000;
+                background: #fff;
+                color: #000;
+            }
+            .ticket-value {
+                color: #000;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Check-In Confirmation</h1>
-        <p>You have successfully checked in!</p>
-        <div class="hostel-details">
-            <p>Hostel Name: VNRVJIET Hostel</p>
-            <p>Address: Pragathi Nagar, Nizampet (S.O), Hyderabad, Telangana, India - 500 090</p>
-            <p>Contact: 9876541230</p>
+    <header></header>
+
+    <main>
+        <div class="glass-card">
+            <h2>Check-In Successful!</h2>
+            <p class="subtitle" style="margin-bottom: 20px;">Your room has been successfully allocated. Here is your receipt.</p>
+
+            <div class="ticket-wrapper">
+                <div class="ticket-header">
+                    <div class="ticket-logo">VNR HOSTEL ALLOCATION</div>
+                    <div class="ticket-title" id="ticketId">TXN-#####</div>
+                </div>
+
+                <div class="ticket-grid">
+                    <div class="ticket-item">
+                        <span class="ticket-label">Student Name</span>
+                        <span class="ticket-value" id="ticketName">--</span>
+                    </div>
+                    <div class="ticket-item">
+                        <span class="ticket-label">Email Address</span>
+                        <span class="ticket-value" id="ticketEmail">--</span>
+                    </div>
+                    <div class="ticket-item">
+                        <span class="ticket-label">Room Allocation</span>
+                        <span class="ticket-value" id="ticketRoom">--</span>
+                    </div>
+                    <div class="ticket-item">
+                        <span class="ticket-label">Hostel Block</span>
+                        <span class="ticket-value" id="ticketBlock">--</span>
+                    </div>
+                    <div class="ticket-item">
+                        <span class="ticket-label">Sharing Type</span>
+                        <span class="ticket-value" id="ticketType">--</span>
+                    </div>
+                    <div class="ticket-item">
+                        <span class="ticket-label">Check-In Date</span>
+                        <span class="ticket-value" id="ticketDate">--</span>
+                    </div>
+                </div>
+
+                <div class="ticket-footer">
+                    <strong>VNRVJIET Hostel</strong><br>
+                    Pragathi Nagar, Nizampet (S.O), Hyderabad, Telangana - 500090<br>
+                    Contact: 9876541230 | email: hostels@vnrvjiet.ac.in
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <button onclick="window.print()" class="btn btn-secondary">
+                    🖨️ Print Receipt
+                </button>
+                <a href="confirmation.html" class="btn btn-primary">
+                    Go to Dashboard
+                </a>
+            </div>
         </div>
-    </div>
+    </main>
+
+    <footer></footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = getLoggedInUser();
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Retrieve latest booking details
+            const latestBooking = JSON.parse(localStorage.getItem('hms_latest_booking'));
+
+            if (latestBooking && latestBooking.username === user.username) {
+                document.getElementById('ticketId').innerText = latestBooking.id;
+                document.getElementById('ticketName').innerText = latestBooking.fullName;
+                document.getElementById('ticketEmail').innerText = latestBooking.email;
+                document.getElementById('ticketRoom').innerText = `Room ${latestBooking.roomNumber}`;
+                document.getElementById('ticketBlock').innerText = latestBooking.block;
+                document.getElementById('ticketType').innerText = latestBooking.roomType;
+                document.getElementById('ticketDate').innerText = latestBooking.checkInDate;
+            } else {
+                // Fallback to active checkin if no latest booking matches
+                const active = getUserActiveCheckIn(user.username);
+                if (active) {
+                    document.getElementById('ticketId').innerText = active.id;
+                    document.getElementById('ticketName').innerText = active.fullName;
+                    document.getElementById('ticketEmail').innerText = active.email;
+                    document.getElementById('ticketRoom').innerText = `Room ${active.roomNumber}`;
+                    document.getElementById('ticketBlock').innerText = active.block;
+                    document.getElementById('ticketType').innerText = active.roomType;
+                    document.getElementById('ticketDate').innerText = active.checkInDate;
+                } else {
+                    showToast('No active check-in record found!', 'danger');
+                    setTimeout(() => {
+                        window.location.href = 'confirmation.html';
+                    }, 2000);
+                }
+            }
+        });
+    </script>
 </body>
+</html>

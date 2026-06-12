@@ -3,117 +3,230 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Check-In</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
-            margin: 0;
-            padding: 20px;
-            text-align: center;
-        }
-        .container {
-            max-width: 400px;
-            margin: 50px auto;
-            background-color: #fff;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-        }
-        h2 {
-            color: #333;
-            margin-bottom: 20px;
-        }
-        form {
-            text-align: left;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            color: #333;
-        }
-        .form-group input[type="text"],
-        .form-group input[type="date"],
-        .form-group input[type="email"] {
-            width: calc(100% - 20px);
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 1em;
-        }
-        .form-group textarea {
-            width: calc(100% - 20px);
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 1em;
-        }
-        .form-group button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1em;
-        }
-        .form-group button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    <title>Check-In - VNR Hostels</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h2>Check-In</h2>
-        <form id="checkInForm" onsubmit="return handleCheckIn()">
-            <div class="form-group">
-                <label for="fullName">Full Name:</label>
-                <input type="text" id="fullName" name="fullName" required>
+    <div class="app-container">
+        <div class="main-content">
+            <div class="glass-card medium" style="margin: 0 auto;">
+                <h2>Hostel Check-In</h2>
+                <p class="subtitle">Complete the fields below to request room allocation.</p>
+
+                <form id="checkInForm" onsubmit="return handleCheckIn(event)">
+                    <h3 style="font-size: 1.1rem; margin-bottom: 15px; color: var(--primary); border-bottom: 1px solid var(--glass-border); padding-bottom: 5px;">
+                        Personal Information
+                    </h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="fullName">Full Name</label>
+                            <input type="text" id="fullName" required readonly style="background: rgba(255, 255, 255, 0.01); color: var(--text-muted);">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email ID</label>
+                            <input type="email" id="email" required readonly style="background: rgba(255, 255, 255, 0.01); color: var(--text-muted);">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="text" id="phone" required readonly style="background: rgba(255, 255, 255, 0.01); color: var(--text-muted);">
+                        </div>
+                        <div class="form-group">
+                            <label for="nationality">Nationality</label>
+                            <input type="text" id="nationality" placeholder="e.g. Indian" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="idType">ID Document Type</label>
+                            <select id="idType" required>
+                                <option value="" disabled selected>Select ID Type</option>
+                                <option value="Aadhar">Aadhar Card</option>
+                                <option value="PAN">PAN Card</option>
+                                <option value="Passport">Passport</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="idNumber">ID/Passport Number</label>
+                            <input type="text" id="idNumber" placeholder="Enter ID number" required>
+                        </div>
+                    </div>
+
+                    <h3 style="font-size: 1.1rem; margin: 25px 0 15px 0; color: var(--primary); border-bottom: 1px solid var(--glass-border); padding-bottom: 5px;">
+                        Accommodation Details
+                    </h3>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="roomType">Room Sharing Type</label>
+                            <select id="roomType" onchange="updateRoomList()" required>
+                                <option value="" disabled selected>Select Sharing Type</option>
+                                <option value="Single Sharing">Single Sharing ($500/mo)</option>
+                                <option value="Double Sharing">Double Sharing ($350/mo)</option>
+                                <option value="Four Sharing">Four Sharing ($200/mo)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="block">Hostel Block</label>
+                            <select id="block" onchange="updateRoomList()" required>
+                                <option value="" disabled selected>Select Block</option>
+                                <option value="Block A">Block A</option>
+                                <option value="Block B">Block B</option>
+                                <option value="Block C">Block C</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="roomNumber">Available Room</label>
+                            <select id="roomNumber" required disabled>
+                                <option value="" disabled selected>Please select room type & block</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="checkInDate">Check-In Date</label>
+                            <input type="date" id="checkInDate" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="comments">Special Comments / Medical Requests</label>
+                        <textarea id="comments" rows="3" placeholder="Enter any extra details or requests (optional)"></textarea>
+                    </div>
+
+                    <button type="submit" id="submitBtn" class="btn btn-primary" style="margin-top: 15px;">Confirm Check-In</button>
+                </form>
             </div>
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            <div class="form-group">
-                <label for="idNumber">ID/Passport Number:</label>
-                <input type="text" id="idNumber" name="idNumber" required>
-            </div>
-            <div class="form-group">
-                <label for="phone">Phone Number:</label>
-                <input type="text" id="phone" name="phone" required>
-            </div>
-            <div class="form-group">
-                <label for="nationality">Nationality:</label>
-                <input type="text" id="nationality" name="nationality" required>
-            </div>
-            <div class="form-group">
-                <label for="checkInDate">Check-In Date:</label>
-                <input type="date" id="checkInDate" name="checkInDate" required>
-            </div>
-            <div class="form-group">
-                <label for="comments">Comments:</label>
-                <textarea id="comments" name="comments" rows="4"></textarea>
-            </div>
-            <div class="form-group">
-                <button type="submit">Check-In</button>
-            </div>
-        </form>
+        </div>
     </div>
 
     <script>
-        function handleCheckIn() {
-            // Replace with actual check-in logic (e.g., API call)
-            alert('You have successfully checked in!');
-            // Redirect to checkin_confirmation.html or another page after successful check-in
-            redirectTo('checkin_confirmation.html');
-            return false; // Prevent form submission
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = getLoggedInUser();
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Check if already checked in
+            const activeBooking = getUserActiveCheckIn(user.username);
+            if (activeBooking) {
+                showToast('You are already checked in! Redirecting to dashboard...', 'warning');
+                setTimeout(() => {
+                    window.location.href = 'confirmation.html';
+                }, 1500);
+                return;
+            }
+
+            // Autofill user details
+            document.getElementById('fullName').value = user.fullName;
+            document.getElementById('email').value = user.email;
+            document.getElementById('phone').value = user.phone;
+
+            // Set default date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('checkInDate').value = today;
+            document.getElementById('checkInDate').min = today;
+        });
+
+        function updateRoomList() {
+            const roomType = document.getElementById('roomType').value;
+            const block = document.getElementById('block').value;
+            const roomDropdown = document.getElementById('roomNumber');
+            const submitBtn = document.getElementById('submitBtn');
+
+            if (!roomType || !block) {
+                roomDropdown.disabled = true;
+                roomDropdown.innerHTML = '<option value="" disabled selected>Please select room type & block</option>';
+                return;
+            }
+
+            // Get available rooms for type
+            let available = getAvailableRooms(roomType);
+            
+            // Filter by block
+            available = available.filter(r => r.block === block);
+
+            roomDropdown.innerHTML = '';
+            
+            if (available.length === 0) {
+                roomDropdown.disabled = true;
+                const opt = document.createElement('option');
+                opt.value = '';
+                opt.text = '⚠️ No rooms available in this combination';
+                opt.selected = true;
+                roomDropdown.appendChild(opt);
+                submitBtn.disabled = true;
+                submitBtn.style.opacity = '0.5';
+                submitBtn.style.cursor = 'not-allowed';
+            } else {
+                roomDropdown.disabled = false;
+                submitBtn.disabled = false;
+                submitBtn.style.opacity = '1';
+                submitBtn.style.cursor = 'pointer';
+
+                const defaultOpt = document.createElement('option');
+                defaultOpt.value = '';
+                defaultOpt.text = 'Select Room';
+                defaultOpt.disabled = true;
+                defaultOpt.selected = true;
+                roomDropdown.appendChild(defaultOpt);
+
+                available.forEach(room => {
+                    const opt = document.createElement('option');
+                    opt.value = room.roomNumber;
+                    const vacancy = room.capacity - room.occupiedCount;
+                    opt.text = `Room ${room.roomNumber} (${vacancy}/${room.capacity} slots left)`;
+                    roomDropdown.appendChild(opt);
+                });
+            }
         }
 
-        function redirectTo(page) {
-            window.location.href = page;
+        function handleCheckIn(e) {
+            e.preventDefault();
+            
+            const user = getLoggedInUser();
+            const roomType = document.getElementById('roomType').value;
+            const block = document.getElementById('block').value;
+            const roomNumber = document.getElementById('roomNumber').value;
+
+            if (!roomNumber) {
+                showToast('Please select an available room.', 'danger');
+                return false;
+            }
+
+            const bookingData = {
+                username: user.username,
+                fullName: user.fullName,
+                email: user.email,
+                phone: user.phone,
+                nationality: document.getElementById('nationality').value.trim(),
+                idType: document.getElementById('idType').value,
+                idNumber: document.getElementById('idNumber').value.trim(),
+                roomType: roomType,
+                block: block,
+                roomNumber: roomNumber,
+                checkInDate: document.getElementById('checkInDate').value,
+                comments: document.getElementById('comments').value.trim()
+            };
+
+            const result = checkInUser(bookingData);
+            
+            if (result.success) {
+                showToast('Check-In successful!', 'success');
+                setTimeout(() => {
+                    window.location.href = 'checkin_confirmation.html';
+                }, 1200);
+            } else {
+                showToast(result.message, 'danger');
+            }
+            return false;
         }
     </script>
 </body>

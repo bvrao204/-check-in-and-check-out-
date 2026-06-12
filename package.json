@@ -1,0 +1,9 @@
+{
+  "name": "hostel-checkin-checkout-sub",
+  "version": "1.0.0",
+  "description": "Hostel Check-in and Check-out System",
+  "scripts": {
+    "dev": "npx http-server ./ -p 8080 -o",
+    "open": "start http://localhost:8080"
+  }
+}

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warden Control Panel - VNR Hostels</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <div class="main-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass-border); padding-bottom: 15px; margin-bottom: 25px; flex-wrap: wrap; gap: 10px;">
+                <h2 style="margin: 0; text-align: left; background: var(--gradient-accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    Hostel Admin Control Panel
+                </h2>
+                <span class="badge badge-success" style="font-size: 0.85rem;">🛡️ Warden Access</span>
+            </div>
+
+            <!-- Tab Headers -->
+            <div class="tabs-header">
+                <button class="tab-btn active" onclick="switchTab('stats-tab', this)">📊 Statistics</button>
+                <button class="tab-btn" onclick="switchTab('rooms-tab', this)">🏢 Room Inventory</button>
+                <button class="tab-btn" onclick="switchTab('students-tab', this)">👨‍🎓 Student Registry</button>
+                <button class="tab-btn" onclick="switchTab('logs-tab', this)">📋 Stay Logs</button>
+            </div>
+
+            <!-- Tab 1: Stats & Overview -->
+            <div id="stats-tab" class="tab-content active">
+                <div class="dashboard-grid">
+                    <div class="stat-card primary">
+                        <div class="stat-icon">🏢</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="statTotalRooms">--</span>
+                            <span class="stat-label">Total Rooms</span>
+                        </div>
+                    </div>
+                    <div class="stat-card success">
+                        <div class="stat-icon">🛏️</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="statVacantBeds">--</span>
+                            <span class="stat-label">Available Beds</span>
+                        </div>
+                    </div>
+                    <div class="stat-card danger">
+                        <div class="stat-icon">👨‍🎓</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="statOccupiedBeds">--</span>
+                            <span class="stat-label">Occupied Beds</span>
+                        </div>
+                    </div>
+                    <div class="stat-card secondary">
+                        <div class="stat-icon">📈</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="statOccupancyRate">0%</span>
+                            <span class="stat-label">Occupancy Rate</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row" style="margin-top: 30px; align-items: start;">
+                    <div style="text-align: left;">
+                        <h3 style="font-size: 1.25rem; margin-bottom: 12px; color:var(--primary);">🔔 Warden Command Overview</h3>
+                        <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin-bottom: 15px;">
+                            This dashboard provides direct access to VNR Hostel room allocations. You can oversee student checklists, review active vacancies, check emergency contacts, and clear logs.
+                        </p>
+                        <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;">
+                            Use the interactive tabs above to search/filter the room matrix, edit registered accounts, or trace past check-in transactions.
+                        </p>
+                    </div>
+
+                    <!-- Interactive Chart Container -->
+                    <div class="widget-card" style="display:flex; flex-direction:column; align-items:center; min-height: 250px;">
+                        <div style="font-size:0.9rem; font-weight:600; color:var(--primary); margin-bottom:15px; width:100%; border-bottom:1px solid var(--glass-border); padding-bottom:8px;">
+                            📊 Live Bed Occupancy Share
+                        </div>
+                        <div style="position:relative; height:180px; width:100%;">
+                            <canvas id="occupancyChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 2: Room Inventory -->
+            <div id="rooms-tab" class="tab-content">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+                    <h3 style="font-size: 1.2rem; margin: 0;">🏢 Hostel Room Allocation Matrix</h3>
+                    <div>
+                        <select id="blockFilter" onchange="loadRoomGrid()" style="padding: 8px 16px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: var(--radius-sm); color: var(--text-main); outline:none;">
+                            <option value="ALL">Show All Blocks</option>
+                            <option value="Block A">Block A</option>
+                            <option value="Block B">Block B</option>
+                            <option value="Block C">Block C</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 15px; margin-bottom: 20px; font-size: 0.85rem;">
+                    <span style="display: flex; align-items: center; gap: 6px;"><span style="display:inline-block; width:12px; height:12px; border-radius:3px; background:rgba(16,185,129,0.05); border:1px solid rgba(16,185,129,0.4)"></span> Vacant/Available Slots</span>
+                    <span style="display: flex; align-items: center; gap: 6px;"><span style="display:inline-block; width:12px; height:12px; border-radius:3px; background:rgba(244,63,94,0.05); border:1px solid rgba(244,63,94,0.4)"></span> Fully Occupied</span>
+                </div>
+
+                <div id="roomGridContainer" class="room-grid">
+                    <!-- Dynamically populated room grid cells -->
+                </div>
+            </div>
+
+            <!-- Tab 3: Student Registry -->
+            <div id="students-tab" class="tab-content">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3 style="font-size: 1.2rem; margin: 0;">👨‍🎓 Registered Students & Staff</h3>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Username</th>
+                                <th>Email ID</th>
+                                <th>Phone Number</th>
+                                <th>Gender / DOB</th>
+                                <th>Role</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentTableBody">
+                            <!-- Dynamically populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tab 4: Stay Logs -->
+            <div id="logs-tab" class="tab-content">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3 style="font-size: 1.2rem; margin: 0;">📋 Complete Stay & Booking logs</h3>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Booking ID</th>
+                                <th>Student Name</th>
+                                <th>Contact Number</th>
+                                <th>Room details</th>
+                                <th>Check-In</th>
+                                <th>Check-Out</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="logsTableBody">
+                            <!-- Dynamically populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        let myChart = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            guardRoute('admin');
+            loadStatsData();
+            loadRoomGrid();
+            loadStudentRegistry();
+            loadSystemLogs();
+        });
+
+        function switchTab(tabId, btn) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(button => {
+                button.classList.remove('active');
+            });
+
+            document.getElementById(tabId).classList.add('active');
+            btn.classList.add('active');
+        }
+
+        function loadStatsData() {
+            const rooms = getRooms();
+            
+            let totalCapacity = 0;
+            let totalOccupied = 0;
+            
+            rooms.forEach(r => {
+                totalCapacity += r.capacity;
+                totalOccupied += r.occupiedCount;
+            });
+            
+            const vacantBeds = totalCapacity - totalOccupied;
+            const occupancyRate = totalCapacity > 0 ? Math.round((totalOccupied / totalCapacity) * 100) : 0;
+            
+            document.getElementById('statTotalRooms').innerText = rooms.length;
+            document.getElementById('statVacantBeds').innerText = vacantBeds;
+            document.getElementById('statOccupiedBeds').innerText = totalOccupied;
+            document.getElementById('statOccupancyRate').innerText = `${occupancyRate}%`;
+
+            // Initialize or update Chart.js Doughnut
+            const ctx = document.getElementById('occupancyChart').getContext('2d');
+            
+            if (myChart) {
+                myChart.destroy();
+            }
+
+            myChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Occupied Beds', 'Vacant Beds'],
+                    datasets: [{
+                        data: [totalOccupied, vacantBeds],
+                        backgroundColor: ['#f43f5e', '#10b981'],
+                        borderColor: 'rgba(255, 255, 255, 0.08)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#f3f4f6',
+                                font: { family: 'Outfit', size: 11 }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function loadRoomGrid() {
+            const blockFilter = document.getElementById('blockFilter').value;
+            const rooms = getRooms();
+            const container = document.getElementById('roomGridContainer');
+            
+            const filteredRooms = blockFilter === 'ALL' ? rooms : rooms.filter(r => r.block === blockFilter);
+            
+            if (filteredRooms.length === 0) {
+                container.innerHTML = `<p style="grid-column: span 10; color: var(--text-dim); text-align: center; padding: 20px;">No rooms found in filter.</p>`;
+                return;
+            }
+
+            container.innerHTML = filteredRooms.map(room => {
+                const isFull = room.occupiedCount >= room.capacity;
+                const statusClass = isFull ? 'occupied' : 'vacant';
+                
+                return `
+                    <div class="room-cell ${statusClass}" title="${room.block} | ${room.type} (${room.occupiedCount}/${room.capacity} occupied)">
+                        <div>Room ${room.roomNumber}</div>
+                        <div style="font-size:0.7rem; color:var(--text-muted); font-weight:normal; margin-top:2px;">
+                            Block ${room.block.split(' ')[1]}
+                        </div>
+                        <div style="font-size:0.75rem; margin-top:4px;">
+                            ${room.occupiedCount}/${room.capacity}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function loadStudentRegistry() {
+            const users = JSON.parse(localStorage.getItem('hms_users') || '[]');
+            const loggedInAdmin = getLoggedInUser();
+            const tableBody = document.getElementById('studentTableBody');
+            
+            tableBody.innerHTML = users.map(u => {
+                const deleteAction = u.username === loggedInAdmin.username 
+                    ? `<span style="font-size: 0.8rem; color: var(--text-dim);">No Actions</span>` 
+                    : `<button onclick="deleteUser('${u.username}')" class="btn btn-danger btn-icon" style="padding: 4px 10px; font-size: 0.75rem;">Delete</button>`;
+                
+                return `
+                    <tr>
+                        <td><strong>${u.fullName}</strong></td>
+                        <td>${u.username}</td>
+                        <td>${u.email}</td>
+                        <td>${u.phone}</td>
+                        <td>${u.gender} | ${u.dob}</td>
+                        <td><span class="badge ${u.role === 'admin' ? 'badge-success' : 'badge-warning'}">${u.role}</span></td>
+                        <td>${deleteAction}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function deleteUser(username) {
+            if (confirm(`Are you sure you want to delete user: ${username}?`)) {
+                let users = JSON.parse(localStorage.getItem('hms_users') || '[]');
+                
+                users = users.filter(u => u.username !== username);
+                localStorage.setItem('hms_users', JSON.stringify(users));
+                
+                showToast(`User ${username} has been deleted.`, 'success');
+                
+                loadStudentRegistry();
+                loadStatsData();
+            }
+        }
+
+        function loadSystemLogs() {
+            const checkins = JSON.parse(localStorage.getItem('hms_checkins') || '[]');
+            const tableBody = document.getElementById('logsTableBody');
+            
+            if (checkins.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="7" style="text-align:center; color: var(--text-dim); padding:30px;">No logs recorded yet.</td></tr>`;
+                return;
+            }
+
+            tableBody.innerHTML = checkins.slice().reverse().map(log => {
+                const statusBadge = log.status === 'Active' 
+                    ? `<span class="badge badge-success">Active</span>` 
+                    : `<span class="badge badge-danger">Checked Out</span>`;
+
+                return `
+                    <tr>
+                        <td><strong>${log.id}</strong></td>
+                        <td>
+                            <strong>${log.fullName}</strong>
+                            <div style="font-size:0.75rem; color:var(--text-muted);">${log.username}</div>
+                        </td>
+                        <td>${log.phone}</td>
+                        <td>
+                            Room ${log.roomNumber} (${log.block})
+                            <div style="font-size:0.75rem; color:var(--text-muted);">${log.roomType}</div>
+                        </td>
+                        <td>${log.checkInDate}</td>
+                        <td>${log.checkOutDate || '--'}</td>
+                        <td>${statusBadge}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+    </script>
+</body>
+</html>
