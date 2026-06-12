@@ -12,48 +12,136 @@
 
     <main>
         <div class="glass-card wide">
-            <h1 style="font-size: 2.5rem; margin-bottom: 15px;">Secure & Comfortable Hostel Living</h1>
-            <p class="subtitle" style="font-size: 1.1rem; margin-bottom: 40px;">
-                Manage your check-in, check-out, and accommodation services seamlessly at VNRVJIET Hostel.
-            </p>
+            
+            <!-- Slides Container -->
+            <div class="slides-container">
+                
+                <!-- Slide 1: Welcome & Overview -->
+                <div class="slide active" id="slide-1">
+                    <h1 style="font-size: 2.3rem; margin-bottom: 15px; text-align: left;">Welcome to VNR Hostels</h1>
+                    <p style="font-size: 1.05rem; line-height: 1.6; color: var(--text-muted); margin-bottom: 25px;">
+                        At VNR VJIET Hostels, we strive to build a secure, comfortable, and vibrant living environment that supports your academic excellence. Our hostel wings provide clean, modern accommodations with full-facility maintenance and active wardens.
+                    </p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
+                        <div style="background: rgba(255,255,255,0.02); border:1px solid var(--glass-border); padding: 15px; border-radius: var(--radius-md);">
+                            <strong style="color:var(--primary); font-size:1rem; display:block; margin-bottom:5px;">🛡️ Secure Housing</strong>
+                            <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.4;">24/7 security wardens and active CCTV monitoring networks.</p>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.02); border:1px solid var(--glass-border); padding: 15px; border-radius: var(--radius-md);">
+                            <strong style="color:var(--primary); font-size:1rem; display:block; margin-bottom:5px;">🌳 Green Campus</strong>
+                            <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.4;">Lush landscaped lawns and clean settings for peaceful living.</p>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.02); border:1px solid var(--glass-border); padding: 15px; border-radius: var(--radius-md);">
+                            <strong style="color:var(--primary); font-size:1rem; display:block; margin-bottom:5px;">📶 Campus Wi-Fi</strong>
+                            <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.4;">High-speed wireless connectivity for academic studies.</p>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.02); border:1px solid var(--glass-border); padding: 15px; border-radius: var(--radius-md);">
+                            <strong style="color:var(--primary); font-size:1rem; display:block; margin-bottom:5px;">📚 Study Halls</strong>
+                            <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.4;">Spacious reading rooms and group discussion tables.</p>
+                        </div>
+                    </div>
+                </div>
 
-            <div class="dashboard-grid">
-                <div class="stat-card primary">
-                    <div class="stat-icon">🏢</div>
-                    <div class="stat-info">
-                        <span class="stat-value" id="totalRoomsVal">--</span>
-                        <span class="stat-label">Total Rooms</span>
+                <!-- Slide 2: Hostel Amenities -->
+                <div class="slide" id="slide-2">
+                    <h1 style="font-size: 2.3rem; margin-bottom: 15px; text-align: left;">Premium Campus Facilities</h1>
+                    <p style="font-size: 1.05rem; line-height: 1.6; color: var(--text-muted); margin-bottom: 25px;">
+                        Our residential hostels are fully equipped to satisfy all student demands, promoting a healthy balance between academic focus and physical fitness.
+                    </p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
+                        <div style="background: rgba(255,255,255,0.02); border:1px solid var(--glass-border); padding: 15px; border-radius: var(--radius-md);">
+                            <strong style="color:var(--secondary); font-size:1rem; display:block; margin-bottom:5px;">🍽️ Dining Mess</strong>
+                            <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.4;">Hygienic mess rooms serving balanced vegetarian & non-vegetarian diets.</p>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.02); border:1px solid var(--glass-border); padding: 15px; border-radius: var(--radius-md);">
+                            <strong style="color:var(--secondary); font-size:1rem; display:block; margin-bottom:5px;">🧺 Laundry Hub</strong>
+                            <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.4;">Automated washing machines, drying lines, and steam press systems.</p>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.02); border:1px solid var(--glass-border); padding: 15px; border-radius: var(--radius-md);">
+                            <strong style="color:var(--secondary); font-size:1rem; display:block; margin-bottom:5px;">🏋️ Gymnasium</strong>
+                            <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.4;">Modern fitness center equipment and outdoor playgrounds.</p>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.02); border:1px solid var(--glass-border); padding: 15px; border-radius: var(--radius-md);">
+                            <strong style="color:var(--secondary); font-size:1rem; display:block; margin-bottom:5px;">🩺 Medical Room</strong>
+                            <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.4;">Dedicated first-aid clinics and a 24/7 standby emergency vehicle.</p>
+                        </div>
                     </div>
                 </div>
-                <div class="stat-card success">
-                    <div class="stat-icon">🛏️</div>
-                    <div class="stat-info">
-                        <span class="stat-value" id="availableBedsVal">--</span>
-                        <span class="stat-label">Beds Available</span>
+
+                <!-- Slide 3: Live Stats Dashboard -->
+                <div class="slide" id="slide-3">
+                    <h1 style="font-size: 2.3rem; margin-bottom: 15px; text-align: left;">Live Occupancy Dashboard</h1>
+                    <p style="font-size: 1.05rem; line-height: 1.6; color: var(--text-muted); margin-bottom: 25px;">
+                        Inspect live room availability metrics below. Log in or create an account to request check-in allocations or departures.
+                    </p>
+                    
+                    <div class="dashboard-grid">
+                        <div class="stat-card primary">
+                            <div class="stat-icon">🏢</div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="totalRoomsVal">--</span>
+                                <span class="stat-label">Total Rooms</span>
+                            </div>
+                        </div>
+                        <div class="stat-card success">
+                            <div class="stat-icon">🛏️</div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="availableBedsVal">--</span>
+                                <span class="stat-label">Beds Available</span>
+                            </div>
+                        </div>
+                        <div class="stat-card danger">
+                            <div class="stat-icon">👨‍🎓</div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="occupiedBedsVal">--</span>
+                                <span class="stat-label">Beds Occupied</span>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="stat-card danger">
-                    <div class="stat-icon">👨‍🎓</div>
-                    <div class="stat-info">
-                        <span class="stat-value" id="occupiedBedsVal">--</span>
-                        <span class="stat-label">Beds Occupied</span>
+                    
+                    <div style="margin-top: 30px; display: flex; flex-direction: column; align-items: center; gap: 20px;">
+                        <div id="action-buttons" style="width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 15px;">
+                            <!-- Dynamically populated buttons -->
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div style="margin-top: 40px; display: flex; flex-direction: column; align-items: center; gap: 20px;">
-                <div id="action-buttons" style="width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 15px;">
-                    <!-- Dynamically populated buttons -->
+            <!-- Slide Navigation Footer -->
+            <div class="slides-footer">
+                <button id="prevBtn" class="slide-nav-btn" onclick="prevSlide()">
+                    ⬅️ Previous
+                </button>
+                
+                <div class="slide-dots">
+                    <button class="slide-dot active" onclick="goToSlide(0)" aria-label="Welcome slide"></button>
+                    <button class="slide-dot" onclick="goToSlide(1)" aria-label="Amenities slide"></button>
+                    <button class="slide-dot" onclick="goToSlide(2)" aria-label="Stats dashboard slide"></button>
                 </div>
+
+                <button id="nextBtn" class="slide-nav-btn" onclick="nextSlide()">
+                    Next ➔
+                </button>
             </div>
+
         </div>
     </main>
 
     <footer></footer>
 
     <script>
+        let currentSlideIndex = 0;
+        let slides = [];
+        let dots = [];
+
         document.addEventListener('DOMContentLoaded', () => {
-            // Load Stats
+            slides = document.querySelectorAll('.slide');
+            dots = document.querySelectorAll('.slide-dot');
+            updateSlides();
+
+            // Load Stats Data
             const rooms = getRooms();
             const totalRooms = rooms.length;
             
@@ -78,7 +166,7 @@
             if (user) {
                 if (user.role === 'admin') {
                     btnContainer.innerHTML = `
-                        <a href="admin.html" class="btn btn-primary">Go to Admin Control Panel</a>
+                        <a href="admin.html" class="btn btn-primary">Go to Warden Control Panel</a>
                     `;
                 } else {
                     btnContainer.innerHTML = `
@@ -98,6 +186,57 @@
                 `;
             }
         });
+
+        function updateSlides() {
+            if (slides.length === 0) return;
+            
+            slides.forEach((slide, i) => {
+                if (i === currentSlideIndex) {
+                    slide.classList.add('active');
+                } else {
+                    slide.classList.remove('active');
+                }
+            });
+
+            dots.forEach((dot, i) => {
+                if (i === currentSlideIndex) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+
+            // Toggle Navigation Buttons states
+            document.getElementById('prevBtn').disabled = (currentSlideIndex === 0);
+            
+            const nextBtn = document.getElementById('nextBtn');
+            if (currentSlideIndex === slides.length - 1) {
+                nextBtn.disabled = true;
+                nextBtn.innerText = "Dashboard Active";
+            } else {
+                nextBtn.disabled = false;
+                nextBtn.innerText = "Next ➔";
+            }
+        }
+
+        function nextSlide() {
+            if (currentSlideIndex < slides.length - 1) {
+                currentSlideIndex++;
+                updateSlides();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlideIndex > 0) {
+                currentSlideIndex--;
+                updateSlides();
+            }
+        }
+
+        function goToSlide(index) {
+            currentSlideIndex = index;
+            updateSlides();
+        }
     </script>
 </body>
 </html>
