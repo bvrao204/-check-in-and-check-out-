@@ -11,6 +11,30 @@ The **Hostel Check-In and Check-Out System** is built to replace manual register
 
 ---
 
+## 📂 Project Structure
+
+```text
+hostel-checkin-checkout/
+├── package.json                   ← Root NPM config (launches static server & browser)
+└── -check-in-and-check-out--main/  ← Source directory containing core application files
+    ├── package.json               ← Sub-directory fallback NPM script config
+    ├── README.md                  ← Project overview, workflow, and instructions
+    ├── LICENSE                    ← MIT License terms
+    ├── styles.css                 ← Core global style layout (glassmorphism & animations)
+    ├── script.js                  ← Database state controller (persists to localStorage)
+    ├── index.html                 ← Application landing page & interactive slideshow
+    ├── register.html              ← User registration (password strength scoring)
+    ├── login.html                 ← User login (role-based redirection)
+    ├── confirmation.html          ← Student portal dashboard (notice board & mess widgets)
+    ├── checkin.html               ← Room check-in form (dynamic room lists & auto-fill)
+    ├── checkin_confirmation.html  ← Printable boarding pass allocation ticket
+    ├── checkout.html              ← Room checkout checklist & feedback form
+    ├── checkout_confirmation.html ← Final departure receipt
+    └── admin.html                 ← Warden administrative panel (occupancy grids & charts)
+```
+
+---
+
 ## 🛠️ Developing Tools & Technologies
 The application is built using lightweight, modern web technologies:
 * **Frontend Structure**: HTML5 (Semantic tags, SVG graphics, responsive forms).
