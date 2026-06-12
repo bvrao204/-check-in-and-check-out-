@@ -49,40 +49,56 @@ The application is built using lightweight, modern web technologies:
 ## 🔄 Project Workflow & User Journeys
 
 ### 1. Student Stay Flow
+
+```text
+[Landing Page] ➔ [Register] ➔ [Sign In]
+(index.html)     (register.html) (login.html)
+[HTML5/CSS3]     [Regex checks]  [Auth logic]
+     │
+     ▼
+[Student Portal] (confirmation.html) [LocalStorage DB] ◄─────────────────────────┐
+     ├─► [Announcements] & [Mess Menu] (script.js)                              │
+     │                                                                           │
+     ├─► [Check-In Form] (checkin.html) [Dynamic lists & validation]              │
+     │         │                                                                 │
+     │         ▼                                                                 │
+     │   [Boarding Receipt] (checkin_confirmation.html) [Print styles]           │
+     │         │                                                                 │
+     │         └─────────────────────────────────────────────────────────────────┤
+     │                                                                           │
+     └─► [Check-Out Form] (checkout.html) [Checklist validation]                 │
+               │                                                                 │
+               ▼                                                                 │
+         [Departure Receipt] (checkout_confirmation.html) ➔ ➔ ➔ ➔ ➔ ➔ ➔ ➔ ➔ ➔ ➔ ➔ ┘
 ```
-[Landing Page] ➔ [Register (Enforces Strong Password)] ➔ [Sign In]
-                      │
-                      ▼
-              [Student Portal] ◄──────────────────────┐
-            /                  \                      │
-           ▼                    ▼                     │
-    [Check-In Form]     [Check-Out Form]              │
-           │                    │                     │
-           ▼                    ▼                     │
-   [Boarding Receipt]   [Departure Receipt] ➔ ➔ ➔ ➔ ➔ ┘
-```
-* **Landing Page (`index.html`)**: Displays real-time hostel stats (total rooms, vacant beds, active occupants) and checks user login status to show appropriate entry actions.
-* **Registration (`register.html`)**: Collects student information, emergency contacts, and enforces a strong password policy (minimum 8 characters, requiring uppercase, lowercase, numbers, and special characters) using a real-time criteria checklist.
-* **Login (`login.html`)**: Verifies credentials from `localStorage` and redirects students to their dashboard.
-* **Dashboard (`confirmation.html`)**: Represents the student portal containing:
+
+* **Landing Page (`index.html` - HTML5, CSS3, Slide Animations)**: Displays real-time hostel stats (total rooms, vacant beds, active occupants) and checks user login status to show appropriate entry actions.
+* **Registration (`register.html` - Regex password criteria checks)**: Collects student information, emergency contacts, and enforces a strong password policy (minimum 8 characters, requiring uppercase, lowercase, numbers, and special characters) using a real-time criteria checklist.
+* **Login (`login.html` - LocalStorage Verification)**: Verifies credentials from `localStorage` and redirects students to their dashboard.
+* **Dashboard (`confirmation.html` - LocalStorage DB query)**: Represents the student portal containing:
   * **Profile Details Card**: Student information.
   * **Active Accommodation Box**: Shows active room details or check-in link.
   * **Announcements Widget**: Real-time mock notifications from the warden.
   * **Today's Mess Menu Widget**: Displays meals based on the current weekday.
   * **Stay History table**: Tabular log of all past check-in transactions.
-* **Check-In (`checkin.html`)**: Auto-fills profile info and offers a dynamic dropdown listing **only vacant rooms** depending on the selected Hostel Block and Sharing Type.
-* **Check-In Ticket (`checkin_confirmation.html`)**: Shows a printable allocation boarding pass with a unique transaction ID.
-* **Check-Out (`checkout.html`)**: Enforces warden checklists (keys returned, room clean, dues cleared) and records ratings.
-* **Check-Out Ticket (`checkout_confirmation.html`)**: Generates the final departure receipt.
+* **Check-In (`checkin.html` - Dynamic arrays filtering)**: Auto-fills profile info and offers a dynamic dropdown listing **only vacant rooms** depending on the selected Hostel Block and Sharing Type.
+* **Check-In Ticket (`checkin_confirmation.html` - CSS Print media styles)**: Shows a printable allocation boarding pass with a unique transaction ID.
+* **Check-Out (`checkout.html` - Checklist constraints)**: Enforces warden checklists (keys returned, room clean, dues cleared) and records ratings.
+* **Check-Out Ticket (`checkout_confirmation.html` - Dynamic cards)**: Generates the final departure receipt.
 
 ### 2. Warden Administrative Flow
+
+```text
+[Warden Sign In] (login.html) [Role guards]
+       │
+       ▼
+[Admin Dashboard] (admin.html)
+       ├─► Statistics & [Chart.js Doughnut Charts] (CDN loaded)
+       ├─► [Room Matrix Grid] (CSS Grid, dynamic status updates)
+       ├─► [Student Registry] (LocalStorage CRUD, Delete users)
+       └─► [System-Wide Stays Logs] (JSON format histories)
 ```
-[Warden Sign In] ➔ [Admin Dashboard]
-                     ├─► Statistics Overview & Live Occupancy Chart
-                     ├─► Interactive Room Inventory Grid (Vacant/Occupied)
-                     ├─► Student Registry (List/Delete users)
-                     └─► System-Wide Transaction Logs
-```
+
 * Wardens access `admin.html` which is guarded and restricted to the `admin` role.
 * Provides live doughnut graphs representing bed occupancy shares.
 * Lists a searchable room matrix color-coded by occupancy status.
