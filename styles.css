@@ -883,12 +883,16 @@ tr:hover td {
 
 /* Footer Section */
 footer {
-    padding: 20px;
+    padding: 50px 20px 30px 20px;
     text-align: center;
     font-size: 0.85rem;
     color: var(--text-dim);
     border-top: 1px solid var(--glass-border);
-    background: rgba(11, 10, 20, 0.4);
+    background: rgba(11, 10, 20, 0.6);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    width: 100%;
+    margin-top: auto;
 }
 
 /* Custom Alert / Toast Box */

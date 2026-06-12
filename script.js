@@ -494,7 +494,43 @@ function injectLayout() {
         const footerEl = document.querySelector('footer');
         if (footerEl) {
             footerEl.innerHTML = `
-                <p>&copy; ${new Date().getFullYear()} VNR VJIET Hostel Management System. Crafted with excellence.</p>
+                <div style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; text-align: left; padding-bottom: 25px;">
+                    <div>
+                        <h4 style="color: var(--primary); margin-bottom: 12px; font-size: 1rem; font-weight: 600; display: flex; align-items: center; gap: 8px;">🏢 VNR Hostels</h4>
+                        <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.6; margin-bottom: 8px;">
+                            <strong>VNR Vignana Jyothi Hostels</strong><br>
+                            Bachupally, Nizampet (S.O),<br>
+                            Hyderabad, Telangana - 500090
+                        </p>
+                        <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.6;">
+                            Email: <a href="mailto:hostel@vnrvjiet.ac.in" style="color: var(--primary); text-decoration: none;">hostel@vnrvjiet.ac.in</a><br>
+                            Phone: +91 40 2304 2758 / 59 / 60
+                        </p>
+                    </div>
+                    <div>
+                        <h4 style="color: var(--secondary); margin-bottom: 12px; font-size: 1rem; font-weight: 600;">⏰ Hostel Rules & Timings</h4>
+                        <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.6;">
+                            <strong>Office Hours:</strong> 9:00 AM - 6:00 PM (Mon-Sat)<br>
+                            <strong>Night Curfew:</strong> 9:30 PM (Main Gate Closes)<br>
+                            <strong>Dinner Timings:</strong> 7:30 PM - 9:30 PM<br>
+                            <strong>Mess Schedule:</strong> Rotates daily (Check Student Portal)
+                        </p>
+                    </div>
+                    <div>
+                        <h4 style="color: var(--success); margin-bottom: 12px; font-size: 1rem; font-weight: 600;">📞 Emergency Contacts</h4>
+                        <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.6; margin-bottom: 8px;">
+                            <strong>Boys Hostel Warden:</strong><br>
+                            Dr. K. Srinivas (+91 98765 43210)
+                        </p>
+                        <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.6;">
+                            <strong>Girls Hostel Warden:</strong><br>
+                            Mrs. M. Radhika (+91 98765 43211)
+                        </p>
+                    </div>
+                </div>
+                <div style="border-top: 1px solid var(--glass-border); padding-top: 20px; font-size: 0.8rem; color: var(--text-dim);">
+                    &copy; ${new Date().getFullYear()} VNR VJIET Hostel Management System. Crafted with excellence. All rights reserved.
+                </div>
             `;
         }
     }
