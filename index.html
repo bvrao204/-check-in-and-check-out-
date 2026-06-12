@@ -37,7 +37,7 @@
                             <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.4;">High-speed wireless connectivity for academic studies.</p>
                         </div>
                         <div style="background: rgba(255,255,255,0.02); border:1px solid var(--glass-border); padding: 15px; border-radius: var(--radius-md);">
-                            <strong style="color:var(--primary); font-size:1rem; display:block; margin-bottom:5px;">📚 Study Halls</strong>
+                            <strong style="color:var(--primary); font-size:1rem; display:block; margin-bottom:5px;">📚 Study Zones</strong>
                             <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.4;">Spacious reading rooms and group discussion tables.</p>
                         </div>
                     </div>
@@ -70,8 +70,21 @@
                     </div>
                 </div>
 
-                <!-- Slide 3: Live Stats Dashboard -->
+                <!-- Slide 3: Virtual Video Tour -->
                 <div class="slide" id="slide-3">
+                    <h1 style="font-size: 2.3rem; margin-bottom: 15px; text-align: left;">Virtual Hostel Tour</h1>
+                    <p style="font-size: 1.05rem; line-height: 1.6; color: var(--text-muted); margin-bottom: 15px;">
+                        Take a look inside the VNR Vignana Jyothi hostel facilities, rooms, mess halls, study areas, and gymnasium to explore campus housing.
+                    </p>
+                    
+                    <!-- Responsive Video Wrapper -->
+                    <div style="position: relative; padding-bottom: 40%; height: 0; overflow: hidden; border-radius: var(--radius-md); border: 1px solid var(--glass-border); background: #000; box-shadow: var(--shadow-main);">
+                        <iframe src="https://www.youtube.com/embed/5R0W864-tYc" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+
+                <!-- Slide 4: Live Stats Dashboard -->
+                <div class="slide" id="slide-4">
                     <h1 style="font-size: 2.3rem; margin-bottom: 15px; text-align: left;">Live Occupancy Dashboard</h1>
                     <p style="font-size: 1.05rem; line-height: 1.6; color: var(--text-muted); margin-bottom: 25px;">
                         Inspect live room availability metrics below. Log in or create an account to request check-in allocations or departures.
@@ -118,7 +131,8 @@
                 <div class="slide-dots">
                     <button class="slide-dot active" onclick="goToSlide(0)" aria-label="Welcome slide"></button>
                     <button class="slide-dot" onclick="goToSlide(1)" aria-label="Amenities slide"></button>
-                    <button class="slide-dot" onclick="goToSlide(2)" aria-label="Stats dashboard slide"></button>
+                    <button class="slide-dot" onclick="goToSlide(2)" aria-label="Video tour slide"></button>
+                    <button class="slide-dot" onclick="goToSlide(3)" aria-label="Stats dashboard slide"></button>
                 </div>
 
                 <button id="nextBtn" class="slide-nav-btn" onclick="nextSlide()">
