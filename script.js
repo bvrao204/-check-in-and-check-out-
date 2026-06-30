@@ -1,5 +1,10 @@
 // Hostel Management System - Central State and Logic
 
+// Force trailing slash on GitHub Pages to prevent relative link / redirection errors
+if (window.location.hostname.includes('github.io') && window.location.pathname.endsWith('/-check-in-and-check-out-')) {
+    window.location.replace(window.location.href + '/');
+}
+
 // 1. Initialize local storage tables if not exist
 function seedDatabase() {
     // Rooms Database
@@ -146,7 +151,7 @@ function isLoggedIn() {
 function handleLoginSubmit(username, password) {
     const users = JSON.parse(localStorage.getItem('hms_users') || '[]');
     const user = users.find(u => (u.username === username || u.email === username) && u.password === password);
-    
+
     if (user) {
         localStorage.setItem('hms_current_user', JSON.stringify(user));
         return { success: true, role: user.role };
@@ -156,7 +161,7 @@ function handleLoginSubmit(username, password) {
 
 function handleRegisterSubmit(userData) {
     const users = JSON.parse(localStorage.getItem('hms_users') || '[]');
-    
+
     // Check if user already exists
     if (users.some(u => u.username === userData.username)) {
         return { success: false, message: 'Username is already registered.' };
@@ -170,7 +175,7 @@ function handleRegisterSubmit(userData) {
     if (!strength.isValid) {
         return { success: false, message: 'Password is too weak. Please meet all criteria.' };
     }
-    
+
     users.push(userData);
     localStorage.setItem('hms_users', JSON.stringify(users));
     return { success: true };
@@ -188,7 +193,7 @@ function handleUserLogout() {
 function guardRoute(requiredRole = null) {
     const user = getLoggedInUser();
     const currentPage = window.location.pathname.split('/').pop();
-    
+
     if (!user) {
         if (currentPage !== 'login.html' && currentPage !== 'register.html' && currentPage !== 'index.html' && currentPage !== '') {
             window.location.href = 'login.html';
@@ -224,14 +229,14 @@ function getAvailableRooms(roomType) {
 function checkInUser(bookingData) {
     const rooms = getRooms();
     const room = rooms.find(r => r.roomNumber === bookingData.roomNumber && r.block === bookingData.block);
-    
+
     if (!room) {
         return { success: false, message: 'Selected room not found.' };
     }
     if (room.occupiedCount >= room.capacity) {
         return { success: false, message: 'Selected room is already fully occupied.' };
     }
-    
+
     // Check if user is already checked in somewhere
     const checkins = JSON.parse(localStorage.getItem('hms_checkins') || '[]');
     const activeBooking = checkins.find(c => c.username === bookingData.username && c.status === 'Active');
@@ -254,7 +259,7 @@ function checkInUser(bookingData) {
 
     checkins.push(newBooking);
     localStorage.setItem('hms_checkins', JSON.stringify(checkins));
-    
+
     // Store current active booking details in local storage for quick access in confirmation page
     localStorage.setItem('hms_latest_booking', JSON.stringify(newBooking));
 
@@ -264,7 +269,7 @@ function checkInUser(bookingData) {
 function checkOutUser(checkoutDetails) {
     const checkins = JSON.parse(localStorage.getItem('hms_checkins') || '[]');
     const bookingIndex = checkins.findIndex(c => c.username === checkoutDetails.username && c.status === 'Active');
-    
+
     if (bookingIndex === -1) {
         return { success: false, message: 'No active check-in record found for this user.' };
     }
@@ -308,7 +313,7 @@ function showToast(message, type = 'success') {
         container = document.createElement('div');
         container.id = 'toast-container';
         document.body.appendChild(container);
-        
+
         container.style.position = 'fixed';
         container.style.bottom = '20px';
         container.style.right = '20px';
@@ -320,7 +325,7 @@ function showToast(message, type = 'success') {
 
     const toast = document.createElement('div');
     toast.className = `alert-popup ${type}`;
-    
+
     let icon = 'ℹ️';
     if (type === 'success') icon = '✅';
     if (type === 'danger') icon = '❌';
@@ -332,7 +337,7 @@ function showToast(message, type = 'success') {
     `;
 
     container.appendChild(toast);
-    
+
     // Trigger animation
     setTimeout(() => {
         toast.classList.add('show');
@@ -351,7 +356,7 @@ function showToast(message, type = 'success') {
 function injectLayout() {
     const user = getLoggedInUser();
     const currentPage = window.location.pathname.split('/').pop();
-    
+
     // 6a. Inject SVGs for gradient logo
     if (!document.getElementById('svg-defs')) {
         const defs = document.createElement('div');
@@ -434,10 +439,10 @@ function injectLayout() {
                 </div>
             </div>
         `;
-        
+
         // Prepend sidebar into the app container
         appContainer.innerHTML = sidebarHtml + appContainer.innerHTML;
-        
+
         // Remove standard header / footer if present in sidebar pages
         const head = document.querySelector('header');
         if (head) head.remove();
